@@ -24,7 +24,7 @@ package com.henrikhedberg.ohap;
  * A base object holding all common properties of an item.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.0 (20150503)
+ * @version 1.1 (20160311)
  */
 public abstract class Item {
 	private Container parent;
@@ -32,18 +32,12 @@ public abstract class Item {
 	private String name;
 	private String description;
 	private boolean internal;
-	private double x;
-	private double y;
-	private double z;
 
-	public Item(long identifier, String name, String description, boolean internal, double x, double y, double z) {
+	public Item(long identifier, String name, String description, boolean internal) {
 		this.identifier = identifier;
 		this.name = name;
 		this.description = description;
 		this.internal = internal;
-		this.x = x;
-		this.y = y;
-		this.z = z;
 	}
 
 	public long getIdentifier() {
@@ -63,10 +57,7 @@ public abstract class Item {
 			outgoingMessage.integer32(0);
 		outgoingMessage.text(name)
 			       .text(description)
-			       .binary8(internal)
-			       .decimal64(x)
-			       .decimal64(y)
-			       .decimal64(z);
+			       .binary8(internal);
 	}
 	
 	public Container getParent() {

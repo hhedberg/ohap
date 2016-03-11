@@ -33,7 +33,7 @@ import java.net.InetSocketAddress;
  * the <code>com.sun.new.httpserver</code> package.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.0 (20150503)
+ * @version 1.1 (20160311)
  */
 public class OhapServer implements HbdpConnection.Handler {
 
@@ -55,17 +55,17 @@ public class OhapServer implements HbdpConnection.Handler {
 	private HashMap<Long, Item> items = new HashMap<>();
 
 	public OhapServer() {
-		Container rootContainer = new Container(0, "OHAP Test Server", "This site provides a test server that can be used when testing clients implementing the open home automation protocol. The usage of the server is not allowed for any other purpose, nor it must be tried to operate against the specification. ", false, 0, 0, 0);
+		Container rootContainer = new Container(0, "OHAP Test Server", "This site provides a test server that can be used when testing clients implementing the open home automation protocol. The usage of the server is not allowed for any other purpose, nor it must be tried to operate against the specification. ", false);
 		addItem(rootContainer);
 		rootContainer.attachToServer(this);
 
-		BinaryDevice mains = new BinaryDevice(2, "Mains Switch", "The main mains power switch", false, 10, 10, 2.4, Device.Type.ACTUATOR, true);
+		BinaryDevice mains = new BinaryDevice(2, "Mains Switch", "The main mains power switch", false, Device.Type.ACTUATOR, true);
 		rootContainer.addItem(mains);
 		
-		Container room1 = new Container(1, "Room 1", "One room.", false, 0, 0, 2.4);
+		Container room1 = new Container(1, "Room 1", "One room.", false);
 		rootContainer.addItem(room1);
 
-		DecimalDevice temperature = new DecimalDevice(3, "Temperature", "The temperature of the Room 1", false, 10, 10, 2.4, Device.Type.SENSOR, 19.2, -50, +50, "C", "Celsius Degrees");
+		DecimalDevice temperature = new DecimalDevice(3, "Temperature", "The temperature of the Room 1", false, Device.Type.SENSOR, 19.2, -50, +50, "C", "Celsius Degrees");
 		room1.addItem(temperature);
 		
 	}

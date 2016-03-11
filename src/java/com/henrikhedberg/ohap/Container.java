@@ -29,15 +29,15 @@ import java.io.IOException;
  * {@link Item} base class.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.0 (20150503)
+ * @version 1.1 (20160311)
  */
 public class Container extends Item {
 	private OhapServer server;
 	private HashSet<Item> items = new HashSet<>();
 	private HashSet<OhapSession> listeners = new HashSet<>();
 
-	public Container(long identifier, String name, String description, boolean internal, double x, double y, double z) {
-		super(identifier, name, description, internal, x, y, z);
+	public Container(long identifier, String name, String description, boolean internal) {
+		super(identifier, name, description, internal);
 	}
 
 	public void outputMessage(OutgoingMessage outgoingMessage) {

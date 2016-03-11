@@ -25,7 +25,7 @@ package com.henrikhedberg.ohap;
  * Inherits all common properties from the {@link Device} super class.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.0 (20150503)
+ * @version 1.1 (20160311)
  */
 public class DecimalDevice extends Device {
 	private double value;
@@ -34,8 +34,8 @@ public class DecimalDevice extends Device {
 	private String unit;
 	private String unitAbbreviation;
 
-	public DecimalDevice(long identifier, String name, String description, boolean internal, double x, double y, double z, Type type, double value, double min, double max, String unit, String unitAbbreviation) {
-		super(identifier, name, description, internal, x, y, z, type);
+	public DecimalDevice(long identifier, String name, String description, boolean internal, Type type, double value, double min, double max, String unit, String unitAbbreviation) {
+		super(identifier, name, description, internal, type);
 
 		this.value = value;
 		this.min = min;

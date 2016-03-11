@@ -25,7 +25,7 @@ package com.henrikhedberg.ohap;
  * Inherits all common properties from the {@link Item} base class.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.0 (20150503)
+ * @version 1.1 (20160311)
  */
 public abstract class Device extends Item {
 	public enum Type {
@@ -35,8 +35,8 @@ public abstract class Device extends Item {
 	
 	protected Type type;
 
-	public Device(long identifier, String name, String description, boolean internal, double x, double y, double z, Type type) {
-		super(identifier, name, description, internal, x, y, z);
+	public Device(long identifier, String name, String description, boolean internal, Type type) {
+		super(identifier, name, description, internal);
 
 		this.type = type;
 	}

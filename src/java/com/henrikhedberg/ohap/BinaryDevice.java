@@ -25,13 +25,13 @@ package com.henrikhedberg.ohap;
  * Inherits all common properties from the {@link Device} super class.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.0 (20150503)
+ * @version 1.1 (20160311)
  */
 public class BinaryDevice extends Device {	
 	private boolean value;
 
-	public BinaryDevice(long identifier, String name, String description, boolean internal, double x, double y, double z, Type type, boolean value) {
-		super(identifier, name, description, internal, x, y, z, type);
+	public BinaryDevice(long identifier, String name, String description, boolean internal, Type type, boolean value) {
+		super(identifier, name, description, internal, type);
 
 		this.value = value;
 	}
