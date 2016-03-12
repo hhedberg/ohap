@@ -22,10 +22,7 @@ package com.henrikhedberg.ohap;
 
 import com.henrikhedberg.hbdp.server.*;
 import java.util.HashSet;
-import java.io.OutputStream;
-import java.io.InputStream;
 import java.io.IOException;
-import com.henrikhedberg.util.InputStreamHandler;
 
 /**
  * Open Home Automation Protocol (OHAP) server-side session.
@@ -36,28 +33,25 @@ import com.henrikhedberg.util.InputStreamHandler;
  * messages through a listener mechanism.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.0 (20150503)
+ * @version 1.1 (20150312)
  */
-public class OhapSession implements InputStreamHandler {
+public abstract class OhapSession {
 	private OhapServer server;
-	private String hbdpIdentifier;
-	private InputStream inputStream;
-	private OutputStream outputStream;
-	private IncomingMessage incomingMessage = new IncomingMessage();;
+	private String identifier;
 	private String user;
 	private HashSet<Container> listenedContainers = new HashSet<>();
 	
-	OhapSession(OhapServer server, HbdpConnection connection) {
+	OhapSession(OhapServer server, String identifier) {
 		this.server = server;
-		hbdpIdentifier = connection.getIdentifier();
-		inputStream = connection.getInputStream();
-		outputStream = connection.getOutputStream();
-		connection.setInputStreamHandler(this);
+		this.identifier = identifier;
 	}
 	
+	protected abstract void writeMessage(OutgoingMessage outgoingMessage) throws IOException;
+	protected abstract void close() throws IOException;
+
 	public void sendMessage(OutgoingMessage outgoingMessage) {
 		try {
-			outgoingMessage.writeTo(outputStream);		
+			writeMessage(outgoingMessage);
 		} catch (IOException e) {
 			log("Error: IOException when writing: " + e.getMessage());
 			end();
@@ -65,15 +59,12 @@ public class OhapSession implements InputStreamHandler {
 		}
 	}
 	
-	public void handle(InputStream inputStream) {
-		try {
-			if (!incomingMessage.readFromNB(inputStream))
-				return;
-		} catch (IOException e) {
-			log("Error: IOException when reading: " + e.getMessage());
-			end();
-			return;
-		}
+	protected void readMessageFailed(IOException exception) {
+		log("Error: IOException when reading: " + exception.getMessage());
+		end();
+	}
+	
+	protected void handleMessage(IncomingMessage incomingMessage) {
 		try {
 			int type = incomingMessage.integer8();
 			if (user == null && type != OhapServer.MESSAGE_TYPE_LOGIN) {
@@ -116,9 +107,9 @@ public class OhapSession implements InputStreamHandler {
 		}
 	}
 	
-	public void end() {
+	private void end() {
 		try {
-			outputStream.close();
+			close();
 		} catch (IOException e) {
 		}
 		
@@ -258,6 +249,6 @@ public class OhapSession implements InputStreamHandler {
 
 	private void log(String detail) {
 		long seconds = System.currentTimeMillis() / 1000;
-		System.out.println(seconds + "  " + hbdpIdentifier + "  Ohap  " + detail);
+		System.out.println(seconds + "  " + identifier + "  Ohap  " + detail);
 	}
 }

@@ -20,22 +20,18 @@
 
 package com.henrikhedberg.ohap;
 
-import com.henrikhedberg.hbdp.server.*;
 import java.util.HashMap;
 import java.io.IOException;
-import com.sun.net.httpserver.*;
-import java.net.InetSocketAddress;
 
 /**
- * Open Home Automation Protocol (OHAP) server.
- *
- * <p>The implementation relies on the {@link HbdpServer} and
- * the <code>com.sun.new.httpserver</code> package.
+ * Open Home Automation Protocol (OHAP) server. A subclass
+ * must implement a method to accept connections and
+ * instantiate OhapSessions.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.1 (20160311)
+ * @version 1.2 (20160312)
  */
-public class OhapServer implements HbdpConnection.Handler {
+public abstract class OhapServer {
 
 	public static final int MESSAGE_TYPE_LOGIN = 0;
 	public static final int MESSAGE_TYPE_LOGOUT = 1;
@@ -80,18 +76,5 @@ public class OhapServer implements HbdpConnection.Handler {
 	
 	public boolean authenticateUser(String name, String password) {
 		return true;
-	}
-
-	public void handle(HbdpConnection connection) {
-		OhapSession session = new OhapSession(this, connection);
-	}
-	
-	public static void main(String[] args) throws IOException {
-		OhapServer ohapServer = new OhapServer();
-		HttpServer httpServer = HttpServer.create(new InetSocketAddress(18000), 10);
-		HttpContext httpContext = httpServer.createContext("/");
-		HbdpServer hbdpServer = new HbdpServer(httpContext, ohapServer);
-		httpServer.setExecutor(null);
-		httpServer.start();
 	}
 }

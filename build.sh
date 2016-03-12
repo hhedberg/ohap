@@ -3,13 +3,13 @@
 rm -Rf bin/jar
 mkdir -p bin/jar
 
-echo "Building ohap-server.jar..."
+echo "Building hbdp-ohap-server.jar..."
 rm -Rf bin/class
 mkdir -p bin/class
 (cd src/java &&
-javac -d ../../bin/class com/henrikhedberg/ohap/OhapServer.java) &&
+javac -d ../../bin/class com/henrikhedberg/ohap/HbdpOhapServer.java) &&
 (cd bin/class &&
-jar cfm ../jar/ohap-server.jar ../../src/manifest/ohap-server.manifest com)
+jar cfm ../jar/hbdp-ohap-server.jar ../../src/manifest/hbdp-ohap-server.manifest com)
 
 echo "Building hbdp-connection-example.jar..."
 rm -Rf bin/class
