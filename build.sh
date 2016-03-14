@@ -19,6 +19,15 @@ javac -d ../../bin/class com/henrikhedberg/hbdp/client/HbdpConnectionExample.jav
 (cd bin/class &&
 jar cfm ../jar/hbdp-connection-example.jar ../../src/manifest/hbdp-connection-example.manifest com)
 
+echo "Building echo-tcp-server.jar..."
+rm -Rf bin/class
+mkdir -p bin/class
+(cd src/java &&
+javac -d ../../bin/class com/henrikhedberg/util/EchoTcpServer.java) &&
+(cd bin/class &&
+jar cfm ../jar/echo-tcp-server.jar ../../src/manifest/echo-tcp-server.manifest com)
+
+
 echo "Building documentation..."
 rm -Rf doc
 mkdir -p doc
