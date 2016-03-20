@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.nio.ByteBuffer;
 
 /**
  * Builds an outgoing OHAP message.
@@ -31,10 +32,11 @@ import java.util.Arrays;
  * <p>Use {@link #integer8(int)}, {@link #integer16(int)}, {@link #integer32(long)},
  * {@link #decimal64(double)}, {@link #allBytes(byte[])}, {@link #binary8(boolean)},
  * and {@link #text(String)} sequentially to build a message. Then, call
- * {@link #writeTo(OutputStream)} to write it into an {@link OutputStream}.
+ * {@link #writeTo(OutputStream)} to write it into an {@link OutputStream}, or
+ * {@link #asByteBuffer()} to get it as a @{link ByteBuffer}.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.0 (20150503)
+ * @version 1.1 (20160320)
  */
 public class OutgoingMessage {
 	private byte[] buffer = new byte[256];
@@ -160,6 +162,20 @@ public class OutgoingMessage {
 		position = length;
 
 		outputStream.write(buffer, 0, length);
+	}
+
+	/**
+	 * Returns the message as a {@link ByteBuffer}.
+	 *
+	 * @return message as a ByteBuffer
+	 */
+	public ByteBuffer asByteBuffer() {
+		int length = position;
+		position = 0;
+		integer16(length - 2);
+		position = length;
+
+		return ByteBuffer.wrap(buffer, 0, length);
 	}
 
 	private void ensureCapacity(int appendLength) {

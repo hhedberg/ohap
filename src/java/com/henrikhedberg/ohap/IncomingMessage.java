@@ -24,17 +24,19 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.ByteBuffer;
 
 /**
  * Parses an incoming OHAP message.
  *
  * <p>Call either {@link #readFrom(InputStream)} or {@link #readFromNB(InputStream)} to
- * read a message from an {@link InputStream}. Then, use {@link #integer8()},
+ * read a message from an {@link InputStream} or @{link #readFrom(ByteBuffer) to read
+ * a message from a {@link ByteBuffer}. Then, use {@link #integer8()},
  * {@link #integer16()}, {@link #integer32()}, {@link #decimal64()}, {@link #allBytes(byte[])},
  * {@link #binary8()}, and {@link #text()} sequentially to take parsed values.
  *
  * @author Henrik Hedberg &lt;henrik.hedberg@iki.fi&gt;
- * @version 1.0 (20150503)
+ * @version 1.1 (20160320)
  */
 public class IncomingMessage {
 	private byte[] buffer;
@@ -70,7 +72,6 @@ public class IncomingMessage {
 	 * @return whether the message was fully read
 	 * @throws IOException if an operation on the given stream throws an exception
 	 */
-	// Non-blocking version of the readFrom() method. Relies on the InputStream.available() to work.
 	public boolean readFromNB(InputStream inputStream) throws IOException {
 		if (nbLength == -1) {
 			if (inputStream.available() < 2)
@@ -85,6 +86,35 @@ public class IncomingMessage {
 			return false;
 
 		buffer = readExactly(inputStream, nbLength);
+		position = 0;
+		nbLength = -1;
+
+		return true;
+	}
+
+	/**
+	 * Tries to read one message from the given {@link ByteBuffer}. If
+	 * the message is fully read, returns true. If the message is not
+	 * fully available yet, does not block but returns false. In that
+	 * case, the message may be partially taken from the buffer.
+	 *
+	 * @param byteBuffer the buffer to read from
+	 * @return whether the message was fully read
+	 */
+	public boolean readFromNB(ByteBuffer byteBuffer) {
+		if (nbLength == -1) {
+			if (byteBuffer.remaining() < 2)
+				return false;
+
+			buffer = readExactly(byteBuffer, 2);
+			position = 0;
+			nbLength = integer16();
+		}
+
+		if (byteBuffer.remaining() < nbLength)
+			return false;
+
+		buffer = readExactly(byteBuffer, nbLength);
 		position = 0;
 		nbLength = -1;
 
@@ -219,6 +249,14 @@ public class IncomingMessage {
 			offset += got;
 			length -= got;
 		}
+
+		return bytes;
+	}
+
+	private static byte[] readExactly(ByteBuffer byteBuffer, int length) {
+		byte[] bytes = new byte[length];
+
+		byteBuffer.get(bytes);
 
 		return bytes;
 	}

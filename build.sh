@@ -11,6 +11,14 @@ javac -d ../../bin/class com/henrikhedberg/ohap/HbdpOhapServer.java) &&
 (cd bin/class &&
 jar cfm ../jar/hbdp-ohap-server.jar ../../src/manifest/hbdp-ohap-server.manifest com)
 
+echo "Building tcp-ohap-server.jar..."
+rm -Rf bin/class
+mkdir -p bin/class
+(cd src/java &&
+javac -d ../../bin/class com/henrikhedberg/ohap/TcpOhapServer.java) &&
+(cd bin/class &&
+jar cfm ../jar/tcp-ohap-server.jar ../../src/manifest/tcp-ohap-server.manifest com)
+
 echo "Building hbdp-connection-example.jar..."
 rm -Rf bin/class
 mkdir -p bin/class
