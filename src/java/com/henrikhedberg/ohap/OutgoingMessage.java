@@ -26,7 +26,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 
 /**
- * Builds an outgoing HBDP message.
+ * Builds an outgoing OHAP message.
  *
  * <p>Use {@link #integer8(int)}, {@link #integer16(int)}, {@link #integer32(long)},
  * {@link #decimal64(double)}, {@link #allBytes(byte[])}, {@link #binary8(boolean)},

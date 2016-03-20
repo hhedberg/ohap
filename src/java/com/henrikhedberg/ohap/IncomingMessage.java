@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 
 /**
- * Parses an incoming HBDP message.
+ * Parses an incoming OHAP message.
  *
  * <p>Call either {@link #readFrom(InputStream)} or {@link #readFromNB(InputStream)} to
  * read a message from an {@link InputStream}. Then, use {@link #integer8()},
